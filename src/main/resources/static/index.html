@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Records — Patients</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="brand">
+        <span class="brand-mark">TCM 传统中医馆</span>
+        <span class="brand-sub">Management System</span>
+    </div>
+    <nav class="main-nav">
+        <a href="index.html" class="active">Patients</a>
+        <a href="medicines.html">Medicines</a>
+        <a href="calendar.html">Appointments</a>
+    </nav>
+    <div class="header-actions">
+        <button id="export-toggle-btn" class="btn btn-secondary btn-small" type="button">Export Transactions</button>
+        <button id="theme-toggle-btn" class="theme-toggle" type="button">
+            <span class="icon">☾</span><span class="label">Dark</span>
+        </button>
+    </div>
+</header>
+
+<main>
+    <div class="toggle-panel" id="export-panel">
+        <div class="form-card" style="max-width: none; display: flex; gap: 0.6rem; align-items: flex-end; flex-wrap: wrap;">
+            <div class="field" style="margin-bottom: 0; min-width: 0; flex: 1 1 160px;">
+                <label>From</label>
+                <input type="date" id="export-start-date" style="min-width: 0; width: 100%;">
+            </div>
+            <div class="field" style="margin-bottom: 0; min-width: 0; flex: 1 1 160px;">
+                <label>To</label>
+                <input type="date" id="export-end-date" style="min-width: 0; width: 100%;">
+            </div>
+            <button class="btn btn-primary btn-small" id="export-download-btn" type="button" style="flex: 0 0 auto; padding-top: 0.7rem; padding-bottom: 0.7rem;">Download</button>
+            <div class="inline-error" id="export-error" style="width: 100%;"></div>
+        </div>
+    </div>
+
+    <h1 style="font-size: 1.6rem; margin-bottom: 1.1rem;">Find a patient</h1>
+
+    <div class="search-shell" id="search-shell">
+        <input
+                type="text"
+                id="search-input"
+                class="search-input"
+                placeholder="Search by name, IC number, or phone…"
+                autocomplete="off"
+        >
+    </div>
+    <div class="search-meta" id="search-meta">Loading patients…</div>
+
+    <div class="results-wrap">
+        <table id="results-table" style="display: none;">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>IC No.</th>
+                <th>Phone</th>
+                <th>Gender</th>
+            </tr>
+            </thead>
+            <tbody id="results-body"></tbody>
+        </table>
+        <div class="empty-state" id="empty-state" style="display: none;">
+            <div class="big">No patients found</div>
+            <div>Try a different name, IC number, or phone number.</div>
+        </div>
+    </div>
+
+    <div class="page-actions">
+        <a href="patient-form.html" class="btn btn-primary">+ Add New Patient</a>
+    </div>
+</main>
+
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/index.js"></script>
+</body>
+</html>

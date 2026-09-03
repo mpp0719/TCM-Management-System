@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Records — Appointments</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="brand">
+        <span class="brand-mark">TCM 传统中医馆</span>
+        <span class="brand-sub">Management System</span>
+    </div>
+    <nav class="main-nav">
+        <a href="index.html">Patients</a>
+        <a href="medicines.html">Medicines</a>
+        <a href="calendar.html" class="active">Appointments</a>
+    </nav>
+    <div class="header-actions">
+        <button id="theme-toggle-btn" class="theme-toggle" type="button">
+            <span class="icon">☾</span><span class="label">Dark</span>
+        </button>
+    </div>
+</header>
+
+<main>
+    <h1 style="font-size: 1.6rem; margin-bottom: 0.4rem;">Appointments</h1>
+    <p class="calendar-hint" id="instruction-hint">Click a day to start a range, then click another day to finish it.</p>
+
+    <div class="form-banner error" id="page-error" style="display: none; margin-top: 1rem;"></div>
+
+    <div class="calendar-layout">
+        <div class="calendar-left">
+            <div class="calendar-toolbar">
+                <div class="calendar-nav">
+                    <button class="calendar-nav-btn" id="prev-month-btn" type="button" aria-label="Previous month">&lsaquo;</button>
+                    <span class="calendar-month-label" id="month-label"></span>
+                    <button class="calendar-nav-btn" id="next-month-btn" type="button" aria-label="Next month">&rsaquo;</button>
+                </div>
+                <button class="btn btn-secondary btn-small" id="clear-range-btn" type="button">Clear Selection</button>
+            </div>
+
+            <div class="calendar-grid-wrap">
+                <div class="weekday-row">
+                    <div class="weekday-label red-label">Sun</div>
+                    <div class="weekday-label">Mon</div>
+                    <div class="weekday-label">Tue</div>
+                    <div class="weekday-label">Wed</div>
+                    <div class="weekday-label">Thu</div>
+                    <div class="weekday-label">Fri</div>
+                    <div class="weekday-label red-label">Sat</div>
+                </div>
+                <div class="calendar-grid" id="calendar-grid"></div>
+            </div>
+        </div>
+
+        <div class="calendar-right">
+            <div class="day-detail-panel" id="day-detail-panel">
+                <div class="day-detail-heading" id="day-detail-heading">No day selected</div>
+                <div id="day-detail-list">
+                    <div style="color: var(--text-muted); font-size: 0.85rem;">Select a date range, then click a highlighted day to see who's booked.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/calendar.js"></script>
+</body>
+</html>

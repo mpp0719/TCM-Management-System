@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Records — Medicines</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="brand">
+        <span class="brand-mark">TCM 传统中医馆</span>
+        <span class="brand-sub">Management System</span>
+    </div>
+    <nav class="main-nav">
+        <a href="index.html">Patients</a>
+        <a href="medicines.html" class="active">Medicines</a>
+        <a href="calendar.html">Appointments</a>
+    </nav>
+    <div class="header-actions">
+        <button id="theme-toggle-btn" class="theme-toggle" type="button">
+            <span class="icon">☾</span><span class="label">Dark</span>
+        </button>
+    </div>
+</header>
+
+<main>
+    <div class="section-heading">
+        <h1 style="font-size: 1.6rem;">Medicine Inventory</h1>
+        <button class="btn btn-primary btn-small" id="add-medicine-toggle" type="button">+ Add New Medicine</button>
+    </div>
+
+    <div class="form-banner error" id="page-error" style="display: none;"></div>
+
+    <div class="toggle-panel" id="add-medicine-panel">
+        <div class="form-banner error" id="medicine-form-error" style="display: none;"></div>
+        <form class="form-card" id="medicine-form" style="max-width: none;">
+            <div class="field">
+                <label for="medName">Medicine Name<span class="required-mark">*</span></label>
+                <input type="text" id="medName" name="medName" placeholder="e.g. 当归" required>
+            </div>
+            <div class="field">
+                <label for="medUnit">Unit<span class="required-mark">*</span></label>
+                <input type="text" id="medUnit" name="medUnit" placeholder="e.g. g, pack, bottle" list="unit-suggestions" required>
+                <datalist id="unit-suggestions">
+                    <option value="g">
+                    <option value="kg">
+                    <option value="ml">
+                    <option value="pack">
+                    <option value="bottle">
+                    <option value="box">
+                </datalist>
+                <div class="hint">Fixed per medicine — every restock and dispense for this medicine will use this unit.</div>
+            </div>
+            <div class="field">
+                <label for="medPrice">Selling Price (per unit)<span class="required-mark">*</span></label>
+                <input type="number" id="medPrice" name="medPrice" min="0.01" step="0.01" placeholder="e.g. 0.80" required>
+                <div class="hint">The rate charged to patients per unit — separate from what you pay to restock.</div>
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="medicine-submit-btn">Save Medicine</button>
+                <button type="button" class="btn btn-secondary" id="medicine-cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="search-shell" id="medicine-search-shell">
+        <input
+                type="text"
+                id="medicine-search-input"
+                class="search-input"
+                placeholder="Search medicines by name…"
+                autocomplete="off"
+        >
+    </div>
+
+    <div class="medicine-list" id="medicine-list"></div>
+    <div class="empty-state" id="medicine-empty-state" style="display: none;">
+        <div class="big">No medicines in inventory yet</div>
+        <div>Add the first one using the button above.</div>
+    </div>
+</main>
+
+<!-- Template for a single medicine card, cloned and filled in by JS -->
+<template id="medicine-card-template">
+    <div class="medicine-card">
+        <div class="medicine-header">
+            <div class="medicine-name-group" style="flex: 1 1 auto; min-width: 0;">
+                <span class="medicine-name"></span>
+                <span class="medicine-unit"></span>
+            </div>
+            <div style="display: flex; gap: 1.5rem; flex: 0 0 auto;">
+                <div class="stock-figure">
+                    <div class="num stock-value"></div>
+                    <div class="lbl">in stock</div>
+                </div>
+                <div class="stock-figure">
+                    <div class="num price-value" style="color: var(--accent-violet);"></div>
+                    <div class="lbl">per unit</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="medicine-actions">
+            <button class="link-btn restock-toggle-btn" type="button">+ Restock</button>
+            <button class="link-btn history-toggle-btn" type="button">View restock history</button>
+            <button class="link-btn edit-medicine-toggle-btn" type="button">Edit</button>
+        </div>
+
+        <div class="inline-form restock-inline-form">
+            <div class="field" style="flex: 0 0 90px; min-width: 0; margin-bottom: 0;">
+                <label>Qty</label>
+                <input type="number" class="restock-qty" min="1" step="1" style="min-width: 0; width: 100%;">
+            </div>
+            <div class="field" style="flex: 0 0 155px; min-width: 0; margin-bottom: 0;">
+                <label>Date</label>
+                <input type="date" class="restock-date" style="min-width: 0; width: 100%;">
+            </div>
+            <div class="field" style="flex: 0 0 110px; min-width: 0; margin-bottom: 0;">
+                <label>Unit Price</label>
+                <input type="number" class="restock-price" min="0.01" step="0.01" style="min-width: 0; width: 100%;">
+            </div>
+            <button class="btn btn-primary btn-small restock-submit-btn" type="button" style="flex: 0 0 auto; padding-top: 0.7rem; padding-bottom: 0.7rem;">Save Restock</button>
+            <div class="inline-error" style="width: 100%;"></div>
+        </div>
+
+        <div class="inline-form edit-medicine-inline-form">
+            <div class="field" style="flex: 1 1 180px; min-width: 0; margin-bottom: 0;">
+                <label>Name</label>
+                <input type="text" class="edit-medicine-name" style="min-width: 0; width: 100%;">
+            </div>
+            <div class="field" style="flex: 0 0 110px; min-width: 0; margin-bottom: 0;">
+                <label>Selling Price</label>
+                <input type="number" class="edit-medicine-price" min="0.01" step="0.01" style="min-width: 0; width: 100%;">
+            </div>
+            <button class="btn btn-primary btn-small edit-medicine-save-btn" type="button" style="flex: 0 0 auto; padding-top: 0.7rem; padding-bottom: 0.7rem;">Save</button>
+            <div class="inline-error edit-medicine-error" style="width: 100%;"></div>
+        </div>
+
+        <div class="restock-history-list"></div>
+    </div>
+</template>
+
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/medicines.js"></script>
+</body>
+</html>

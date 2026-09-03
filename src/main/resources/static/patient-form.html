@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Records — Add Patient</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="brand">
+        <span class="brand-mark">TCM 传统中医馆</span>
+        <span class="brand-sub">Management System</span>
+    </div>
+    <nav class="main-nav">
+        <a href="index.html" class="active">Patients</a>
+        <a href="medicines.html">Medicines</a>
+        <a href="calendar.html">Appointments</a>
+    </nav>
+    <div class="header-actions">
+        <button id="theme-toggle-btn" class="theme-toggle" type="button">
+            <span class="icon">☾</span><span class="label">Dark</span>
+        </button>
+    </div>
+</header>
+
+<main>
+    <div class="page-heading">
+        <h1 id="page-title">Add New Patient</h1>
+        <a href="index.html" class="back-link" id="back-link">&larr; Back to search</a>
+    </div>
+
+    <div class="form-banner error" id="form-error" style="display: none;"></div>
+
+    <form class="form-card" id="patient-form">
+        <div class="field">
+            <label for="name">Name<span class="required-mark">*</span></label>
+            <input type="text" id="name" name="name" required>
+        </div>
+
+        <div class="field">
+            <label for="icNo">IC Number<span class="required-mark">*</span></label>
+            <input type="text" id="icNo" name="icNo" placeholder="e.g. 901231-01-5678" required>
+            <div class="hint">Dashes are optional — you can type with or without them.</div>
+        </div>
+
+        <div class="field">
+            <label for="gender">Gender</label>
+            <select id="gender" name="gender">
+                <option value="">— Select —</option>
+                <option value="M">Male</option>
+                <option value="F">Female</option>
+            </select>
+        </div>
+
+        <div class="field">
+            <label for="phoneNum">Phone Number</label>
+            <input type="tel" id="phoneNum" name="phoneNum" placeholder="e.g. 0123456789">
+        </div>
+
+        <div class="field">
+            <label for="address">Address</label>
+            <textarea id="address" name="address"></textarea>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="btn btn-primary" id="submit-btn">Save Patient</button>
+            <a href="index.html" class="btn btn-secondary" id="cancel-link">Cancel</a>
+        </div>
+    </form>
+</main>
+
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/patient-form.js"></script>
+</body>
+</html>

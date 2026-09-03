@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clinic Records — Patient</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="app-header">
+    <div class="brand">
+        <span class="brand-mark">TCM 传统中医馆</span>
+        <span class="brand-sub">Management System</span>
+    </div>
+    <nav class="main-nav">
+        <a href="index.html" class="active">Patients</a>
+        <a href="medicines.html">Medicines</a>
+        <a href="calendar.html">Appointments</a>
+    </nav>
+    <div class="header-actions">
+        <button id="theme-toggle-btn" class="theme-toggle" type="button">
+            <span class="icon">☾</span><span class="label">Dark</span>
+        </button>
+    </div>
+</header>
+
+<main>
+    <a href="index.html" class="back-link">&larr; Back to search</a>
+
+    <div class="patient-card" id="patient-card" style="margin-top: 1rem;">
+        <div class="patient-card-top">
+            <h1 id="patient-name">Loading…</h1>
+            <a href="#" id="edit-link" class="btn btn-secondary btn-small">Edit Details</a>
+        </div>
+        <div class="info-meta">
+            <span class="item">IC No.<strong id="patient-ic"></strong></span>
+            <span class="item">Phone<strong id="patient-phone"></strong></span>
+            <span class="item">Gender<strong id="patient-gender"></strong></span>
+        </div>
+        <div class="info-address" id="patient-address"></div>
+    </div>
+
+    <div class="form-banner error" id="page-error" style="display: none;"></div>
+
+    <div class="section-heading">
+        <h2>Visit History</h2>
+        <button class="btn btn-primary btn-small" id="add-visit-toggle" type="button">+ Add New Visit</button>
+    </div>
+
+    <div class="toggle-panel" id="add-visit-panel">
+        <div class="form-banner error" id="visit-form-error" style="display: none;"></div>
+        <form class="form-card" id="visit-form" style="max-width: none;">
+            <div class="field">
+                <label for="visitDate">Visit Date<span class="required-mark">*</span></label>
+                <input type="date" id="visitDate" name="visitDate" required>
+            </div>
+            <div class="field">
+                <label for="complaint">Patient Complaint</label>
+                <textarea id="complaint" name="complaint" placeholder="e.g. 下背酸痛"></textarea>
+            </div>
+            <div class="field">
+                <label for="treatmentPlan">Treatment Plan</label>
+                <textarea id="treatmentPlan" name="treatmentPlan"></textarea>
+            </div>
+            <div class="field">
+                <label for="nextAppointmentDate">Next Appointment (optional)</label>
+                <input type="date" id="nextAppointmentDate" name="nextAppointmentDate">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="visit-submit-btn">Save Visit</button>
+                <button type="button" class="btn btn-secondary" id="visit-cancel-btn">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="visit-list" id="visit-list"></div>
+    <div class="empty-state" id="visit-empty-state" style="display: none;">
+        <div class="big">No visits recorded yet</div>
+        <div>Add the first visit using the button above.</div>
+    </div>
+</main>
+
+<!-- Template for a single visit card, cloned and filled in by JS -->
+<template id="visit-card-template">
+    <div class="visit-card">
+        <div class="visit-header">
+            <span class="visit-date"></span>
+            <span class="appointment-badge" style="display: none;"></span>
+        </div>
+        <div class="visit-field complaint-field" style="display: none;">
+            <div class="label">Complaint</div>
+            <div class="value complaint-value"></div>
+        </div>
+        <div class="visit-field treatment-field" style="display: none;">
+            <div class="label">Treatment Plan</div>
+            <div class="value treatment-value"></div>
+        </div>
+        <div class="visit-field">
+            <div class="label">Medication Dispensed</div>
+            <div class="med-list"></div>
+        </div>
+
+        <div class="medicine-actions">
+            <button class="link-btn edit-visit-toggle-btn" type="button">Edit Visit</button>
+            <button class="dispense-toggle-btn" type="button">+ Add medication</button>
+            <button class="link-btn payment-toggle-btn" type="button">Payment</button>
+        </div>
+
+        <div class="inline-form dispense-inline-form">
+            <div class="field" style="flex: 1 1 140px; min-width: 0; margin-bottom: 0;">
+                <label>Medicine</label>
+                <select class="dispense-medicine" style="min-width: 0; width: 100%;"></select>
+            </div>
+            <div class="field qty-field" style="flex: 0 0 70px; min-width: 0; margin-bottom: 0;">
+                <label>Qty</label>
+                <input type="number" class="dispense-qty" min="1" step="1" style="min-width: 0; width: 100%;">
+            </div>
+            <button class="btn btn-primary btn-small dispense-submit-btn" type="button" style="flex: 0 0 auto; padding-top: 0.7rem; padding-bottom: 0.7rem;">Dispense</button>
+            <div class="inline-error"></div>
+        </div>
+
+        <div class="toggle-panel edit-visit-panel" style="margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px dashed var(--border); margin-bottom: 0;">
+            <div class="field">
+                <label>Visit Date</label>
+                <input type="date" class="edit-visitDate">
+            </div>
+            <div class="field">
+                <label>Complaint</label>
+                <textarea class="edit-complaint"></textarea>
+            </div>
+            <div class="field">
+                <label>Treatment Plan</label>
+                <textarea class="edit-treatmentPlan"></textarea>
+            </div>
+            <div class="field">
+                <label>Next Appointment</label>
+                <input type="date" class="edit-nextAppointmentDate">
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-primary btn-small edit-visit-save-btn" type="button">Save Changes</button>
+                <button class="btn btn-secondary btn-small edit-visit-cancel-btn" type="button">Cancel</button>
+            </div>
+            <div class="inline-error edit-visit-error"></div>
+        </div>
+
+        <div class="inline-form payment-block"></div>
+    </div>
+</template>
+
+<script src="js/theme.js"></script>
+<script src="js/api.js"></script>
+<script src="js/patient.js"></script>
+</body>
+</html>
