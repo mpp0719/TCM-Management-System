@@ -102,4 +102,4 @@ Packaged as a standalone Windows `.exe` via `jpackage`, with the JRE bundled ins
 
 ## License
 
-Private project — not currently licensed for public reuse.
+MIT — see [LICENSE](./LICENSE) for details.
